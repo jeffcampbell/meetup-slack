@@ -1,9 +1,7 @@
 # encoding: utf-8
-require "sinatra"
-require "json"
-require "httparty"
-require "dotenv"
-
+require "rubygems"
+require "bundler/setup"
+Bundler.require(:default)
 
 configure do
   # Load .env vars
@@ -56,13 +54,11 @@ def generate_attachment
 
   get_url = @results["event_url"]
 
-  # Complicated method to parse unix time
-  raw_time = @results["time"]
-  utc_offset = @results["utc_offset"]
-  utc_adjusted = raw_time + utc_offset
-  short_time = "#{utc_adjusted}".chop.chop.chop.to_i
-  calc_time = Time.at(short_time)
-  get_time = calc_time.strftime("%I:%M %p %a %b %d %Y")
+  raw_time = @results["time"].to_f / 1000
+  utc_offset = @results["utc_offset"].to_i / 1000
+  calc_time = Time.at(raw_time).getlocal(utc_offset)
+  cldr_time = calc_time.localize
+  get_time = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
 
   response = { title: "#{get_name}", title_link: "#{get_url}", text: "#{get_time}\n#{location}", color: "#{ENV["COLOR"]}"}
 
