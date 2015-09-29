@@ -43,22 +43,22 @@ def generate_attachment
   else
 
   # Check for venue information
-  if JSON.parse(request.body)["results"][0]["venue"]
-    @name = JSON.parse(request.body)["results"][0]["venue"]["name"]
-    @lat = JSON.parse(request.body)["results"][0]["venue"]["lat"]
-    @lon = JSON.parse(request.body)["results"][0]["venue"]["lon"]
+  if @results["venue"]
+    @name = @results["venue"]["name"]
+    @lat = @results["venue"]["lat"]
+    @lon = @results["venue"]["lon"]
     location = "<http://www.google.com/maps/place/#{@lat},#{@lon}|#{@name}>"
   else
     location = "No location provided"
   end
 
-  get_name = JSON.parse(request.body)["results"][0]["name"]
+  get_name = @results["name"]
 
-  get_url = JSON.parse(request.body)["results"][0]["event_url"]
+  get_url = @results["event_url"]
 
   # Complicated method to parse unix time
-  raw_time = JSON.parse(request.body)["results"][0]["time"]
-  utc_offset = JSON.parse(request.body)["results"][0]["utc_offset"]
+  raw_time = @results["time"]
+  utc_offset = @results["utc_offset"]
   utc_adjusted = raw_time + utc_offset
   short_time = "#{utc_adjusted}".chop.chop.chop.to_i
   calc_time = Time.at(short_time)
