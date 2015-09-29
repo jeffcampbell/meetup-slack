@@ -36,6 +36,10 @@ def generate_attachment
   request = HTTParty.get(uri)
   puts "[LOG] #{request.body}"
 
+  if JSON.parse(request.body)["results"] = '[]'
+      response = { title: "No upcoming Meetups" }
+  else
+
   if JSON.parse(request.body)["results"][0]["venue"]
     @name = JSON.parse(request.body)["results"][0]["venue"]["name"]
     @lat = JSON.parse(request.body)["results"][0]["venue"]["lat"]
@@ -57,4 +61,7 @@ def generate_attachment
   get_time = calc_time.strftime("%I:%M %p %a %b %d %Y")
 
   response = { title: "#{get_name}", title_link: "#{get_url}", text: "#{get_time}\n#{location}", color: "#{ENV["COLOR"]}"}
+
+  end
+
 end
