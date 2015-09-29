@@ -1,9 +1,7 @@
 # encoding: utf-8
-require "sinatra"
-require "json"
-require "httparty"
-require "dotenv"
-
+require "rubygems"
+require "bundler/setup"
+Bundler.require(:default)
 
 configure do
   # Load .env vars
