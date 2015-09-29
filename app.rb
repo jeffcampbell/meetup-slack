@@ -36,10 +36,13 @@ def generate_attachment
   request = HTTParty.get(uri)
   puts "[LOG] #{request.body}"
 
-  if JSON.parse(request.body)["results"] = '[]'
-      response = { title: "No upcoming Meetups" }
+  # Check for a nil response in the array
+  @results = JSON.parse(request.body)["results"][0]
+  if @results.nil?
+    response = { title: "No upcoming Meetups" }
   else
 
+  # Check for venue information
   if JSON.parse(request.body)["results"][0]["venue"]
     @name = JSON.parse(request.body)["results"][0]["venue"]["name"]
     @lat = JSON.parse(request.body)["results"][0]["venue"]["lat"]
@@ -53,6 +56,7 @@ def generate_attachment
 
   get_url = JSON.parse(request.body)["results"][0]["event_url"]
 
+  # Complicated method to parse unix time
   raw_time = JSON.parse(request.body)["results"][0]["time"]
   utc_offset = JSON.parse(request.body)["results"][0]["utc_offset"]
   utc_adjusted = raw_time + utc_offset
