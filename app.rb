@@ -56,12 +56,9 @@ def generate_attachment
 
   get_url = @results["event_url"]
 
-  # Complicated method to parse unix time
-  raw_time = @results["time"]
-  utc_offset = @results["utc_offset"]
-  utc_adjusted = raw_time + utc_offset
-  short_time = "#{utc_adjusted}".chop.chop.chop.to_i
-  calc_time = Time.at(short_time)
+  raw_time = @results["time"].to_f / 1000
+  utc_offset = @results["utc_offset"].to_i / 1000
+  calc_time = Time.at(raw_time).getlocal(utc_offset)
   get_time = calc_time.strftime("%I:%M %p %a %b %d %Y")
 
   response = { title: "#{get_name}", title_link: "#{get_url}", text: "#{get_time}\n#{location}", color: "#{ENV["COLOR"]}"}
