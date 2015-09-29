@@ -57,7 +57,8 @@ def generate_attachment
   raw_time = @results["time"].to_f / 1000
   utc_offset = @results["utc_offset"].to_i / 1000
   calc_time = Time.at(raw_time).getlocal(utc_offset)
-  get_time = calc_time.strftime("%I:%M %p %a %b %d %Y")
+  cldr_time = calc_time.localize
+  get_time = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
 
   response = { title: "#{get_name}", title_link: "#{get_url}", text: "#{get_time}\n#{location}", color: "#{ENV["COLOR"]}"}
 
