@@ -1,6 +1,8 @@
 # meetup-slack
 Retrieves the next upcoming Meetup group and posts it to Slack
 
+![example image](http://i.imgur.com/F6hG96F.png)
+
 ### What you will need
 * A [Heroku](http://www.heroku.com) account
 * Your [Meetup API key](http://www.meetup.com/meetup_api/)
