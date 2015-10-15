@@ -58,6 +58,7 @@ def generate_attachment
   calc_firsttime = Time.at(raw_time).getlocal(utc_offset)
   cldr_firsttime = calc_firsttime.localize
   get_firsttime = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
+  end
 
   # Second Meetup
   if @secondresults.nil?
@@ -84,7 +85,6 @@ def generate_attachment
   get_secondtime = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
 
   response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firstime}\n#{firstlocation}", color: "#{ENV["COLOR"]}"}
-
   end
 
 end
