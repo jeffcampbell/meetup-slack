@@ -30,37 +30,60 @@ post "/" do
 end
 
 def generate_attachment
-  uri = "https://api.meetup.com/2/events?group_id=#{ENV["MEETUP_GROUP_ID"]}&page=3&key=#{ENV["MEETUP_API_KEY"]}"
+  uri = "https://api.meetup.com/2/events?group_id=#{ENV["MEETUP_GROUP_ID"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
   request = HTTParty.get(uri)
   puts "[LOG] #{request.body}"
 
   # Check for a nil response in the array
-  @results = JSON.parse(request.body)["results"][0]
-  if @results.nil?
+  @firstresults = JSON.parse(request.body)["results"][0]
+  @secondresults = JSON.parse(request.body)["results"][1]
+
+  # First Meetup
+  if @firstresults.nil?
     response = { title: "No upcoming Meetups" }
   else
-
   # Check for venue information
-  if @results["venue"]
-    @name = @results["venue"]["name"]
-    @lat = @results["venue"]["lat"]
-    @lon = @results["venue"]["lon"]
-    location = "<http://www.google.com/maps/place/#{@lat},#{@lon}|#{@name}>"
+  if @firstresults["venue"]
+    @name = @firstresults["venue"]["name"]
+    @lat = @firstresults["venue"]["lat"]
+    @lon = @firstresults["venue"]["lon"]
+    firstlocation = "<http://www.google.com/maps/place/#{@lat},#{@lon}|#{@name}>"
   else
-    location = "No location provided"
+    firstlocation = "No location provided"
   end
+  get_firstname = @firstresults["name"]
+  get_firsturl = @firstresults["event_url"]
+  raw_firsttime = @firstresults["time"].to_f / 1000
+  utc_firstoffset = @firstresults["utc_offset"].to_i / 1000
+  calc_firsttime = Time.at(raw_time).getlocal(utc_offset)
+  cldr_firsttime = calc_firsttime.localize
+  get_firsttime = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
 
-  get_name = @results["name"]
+  # Second Meetup
+  if @secondresults.nil?
+    get_secondname = ""
+    get_secondurl = ""
+    get_secondtime = ""
+    secondlocation = ""
+  else
+  # Check for venue information
+  if @secondresults["venue"]
+    @name = @secondresults["venue"]["name"]
+    @lat = @secondresults["venue"]["lat"]
+    @lon = @secondresults["venue"]["lon"]
+    secondlocation = "<http://www.google.com/maps/place/#{@lat},#{@lon}|#{@name}>"
+  else
+    secondlocation = "No location provided"
+  end
+  get_secondname = @secondresults["name"]
+  get_secondurl = @secondresults["event_url"]
+  raw_secondtime = @secondresults["time"].to_f / 1000
+  utc_secondoffset = @secondresults["utc_offset"].to_i / 1000
+  calc_secondtime = Time.at(raw_time).getlocal(utc_offset)
+  cldr_secondtime = calc_secondtime.localize
+  get_secondtime = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
 
-  get_url = @results["event_url"]
-
-  raw_time = @results["time"].to_f / 1000
-  utc_offset = @results["utc_offset"].to_i / 1000
-  calc_time = Time.at(raw_time).getlocal(utc_offset)
-  cldr_time = calc_time.localize
-  get_time = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
-
-  response = { title: "#{get_name}", title_link: "#{get_url}", text: "#{get_time}\n#{location}", color: "#{ENV["COLOR"]}"}
+  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firstime}\n#{firstlocation}", color: "#{ENV["COLOR"]}"}
 
   end
 
