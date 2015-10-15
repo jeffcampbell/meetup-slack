@@ -84,7 +84,7 @@ def generate_attachment
   cldr_secondtime = calc_secondtime.localize
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
-  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firstime}\n#{firstlocation}", color: "#{ENV["COLOR"]}"}
+  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", color: "#{ENV["COLOR"]}"}
   end
 
 end
