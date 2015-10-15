@@ -53,6 +53,8 @@ def generate_attachment
   end
   get_firstname = @firstresults["name"]
   get_firsturl = @firstresults["event_url"]
+  get_firstrsvpcount = @firstresults["yes_rsvp_count"]
+  get_firstwaitlistcount = @firstresults["waitlist_count"]
   raw_firsttime = @firstresults["time"].to_f / 1000
   utc_firstoffset = @firstresults["utc_offset"].to_i / 1000
   calc_firsttime = Time.at(raw_firsttime).getlocal(utc_firstoffset)
@@ -84,7 +86,7 @@ def generate_attachment
   cldr_secondtime = calc_secondtime.localize
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
-  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", color: "#{ENV["COLOR"]}"}
+  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", color: "#{ENV["COLOR"]}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Next Meetup:", value: "<#{get_secondurl}|#{get_secondname}>, #{get_secondtime}", short: false } ] }
   end
 
 end
