@@ -30,7 +30,7 @@ post "/" do
 end
 
 def generate_attachment
-  uri = "https://api.meetup.com/2/events?group_urlname=#{ENV["MEETUP_GROUP_URL"]}&page=1&key=#{ENV["MEETUP_API_KEY"]}"
+  uri = "https://api.meetup.com/2/events?group_id=#{ENV["MEETUP_GROUP_ID"]}&page=1&key=#{ENV["MEETUP_API_KEY"]}"
   request = HTTParty.get(uri)
   puts "[LOG] #{request.body}"
 
