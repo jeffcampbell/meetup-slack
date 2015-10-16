@@ -57,8 +57,9 @@ def generate_attachment
   get_firstwaitlistcount = @firstresults["waitlist_count"]
   raw_firsttime = @firstresults["time"].to_f / 1000
   utc_firstoffset = @firstresults["utc_offset"].to_i / 1000
-  calc_firsttime = Time.at(raw_firsttime) #.getlocal(utc_firstoffset)
-  cldr_firsttime = calc_firsttime.localize
+  calc_firsttime = raw_firsttime + utc_firstoffset
+  final_firsttime = Time.at(calc_firsttime)
+  cldr_firsttime = final_firsttime.localize
   get_firsttime = "#{cldr_firsttime.to_short_s} #{cldr_firsttime.to_date.to_full_s}"
   end
 
@@ -82,8 +83,9 @@ def generate_attachment
   get_secondurl = @secondresults["event_url"]
   raw_secondtime = @secondresults["time"].to_f / 1000
   utc_secondoffset = @secondresults["utc_offset"].to_i / 1000
-  calc_secondtime = Time.at(raw_secondtime) #.getlocal(utc_secondoffset)
-  cldr_secondtime = calc_secondtime.localize
+  calc_secondtime = raw_secondtime + utc_secondoffset
+  final_secondtime = Time.at(calc_secondtime)
+  cldr_secondtime = final_secondtime.localize
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
   response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
