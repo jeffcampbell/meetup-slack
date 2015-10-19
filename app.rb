@@ -16,7 +16,9 @@ end
 
 post "/" do
   response = ""
-
+begin
+  puts "[LOG] #{params}"
+  params[:text] = params[:text].sub(params[:trigger_word], "").strip
   unless params[:token] != ENV["OUTGOING_WEBHOOK_TOKEN"]
     response = { text: "Next Meetup:" }
     response[:attachments] = [ generate_attachment ]
@@ -24,13 +26,18 @@ post "/" do
     response[:icon_emoji] = ENV["BOT_ICON"] unless ENV["BOT_ICON"].nil?
     response = response.to_json
   end
-
+end
   status 200
   body response
 end
 
 def generate_attachment
+  user_query = params[:text]
+if user_query.nil?
   uri = "https://api.meetup.com/2/events?group_id=#{ENV["MEETUP_GROUP_ID"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
+else
+  uri = "https://api.meetup.com/2/open_events?topic='#{user_query}''&page=2&key=#{ENV["MEETUP_API_KEY"]}"
+end
   request = HTTParty.get(uri)
   puts "[LOG] #{request.body}"
 
