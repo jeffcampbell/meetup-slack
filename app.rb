@@ -33,7 +33,7 @@ end
 
 def generate_attachment
   user_query = params[:text]
-if user_query.nil
+if user_query = ""
   uri = "https://api.meetup.com/2/events?group_id=#{ENV["MEETUP_GROUP_ID"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
 else
   uri = "https://api.meetup.com/2/open_events?text='#{user_query}'&zip=#{ENV["ZIP_CODE"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
@@ -95,7 +95,7 @@ end
   cldr_secondtime = final_secondtime.localize
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
-  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
+  response = { title: "#{user_query}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
   end
 
 end
