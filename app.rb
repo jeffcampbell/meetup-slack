@@ -33,10 +33,10 @@ end
 
 def generate_attachment
   user_query = params[:text]
-if user_query = ""
+if user_query = ".meetup"
   uri = "https://api.meetup.com/2/events?group_id=#{ENV["MEETUP_GROUP_ID"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
 else
-  uri = "https://api.meetup.com/2/open_events?text='#{user_query}''&page=2&key=#{ENV["MEETUP_API_KEY"]}"
+  uri = "https://api.meetup.com/2/open_events?text='#{user_query}'&zip=#{ENV["ZIP_CODE"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
 end
   request = HTTParty.get(uri)
   puts "[LOG] #{request.body}"
