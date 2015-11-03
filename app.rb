@@ -16,7 +16,9 @@ end
 
 post "/" do
   response = ""
-
+begin
+  puts "[LOG] #{params}"
+  params[:text] = params[:text].sub(params[:trigger_word], "").strip
   unless params[:token] != ENV["OUTGOING_WEBHOOK_TOKEN"]
     response = { text: "Next Meetup:" }
     response[:attachments] = [ generate_attachment ]
@@ -24,44 +26,76 @@ post "/" do
     response[:icon_emoji] = ENV["BOT_ICON"] unless ENV["BOT_ICON"].nil?
     response = response.to_json
   end
-
+end
   status 200
   body response
 end
 
 def generate_attachment
-  uri = "https://api.meetup.com/2/events?group_urlname=#{ENV["MEETUP_GROUP_URL"]}&page=1&key=#{ENV["MEETUP_API_KEY"]}"
+  @user_query = params[:text]
+if @user_query.length == 0
+  uri = "https://api.meetup.com/2/events?group_id=#{ENV["MEETUP_GROUP_ID"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
+else
+  uri = "https://api.meetup.com/2/open_events?topic=#{@user_query}&zip=#{ENV["ZIP_CODE"]}&page=2&key=#{ENV["MEETUP_API_KEY"]}"
+end
   request = HTTParty.get(uri)
   puts "[LOG] #{request.body}"
 
   # Check for a nil response in the array
-  @results = JSON.parse(request.body)["results"][0]
-  if @results.nil?
+  @firstresults = JSON.parse(request.body)["results"][0]
+  @secondresults = JSON.parse(request.body)["results"][1]
+
+  # First Meetup
+  if @firstresults.nil?
     response = { title: "No upcoming Meetups" }
   else
-
   # Check for venue information
-  if @results["venue"]
-    @name = @results["venue"]["name"]
-    @lat = @results["venue"]["lat"]
-    @lon = @results["venue"]["lon"]
-    location = "<http://www.google.com/maps/place/#{@lat},#{@lon}|#{@name}>"
+  if @firstresults["venue"]
+    @name = @firstresults["venue"]["name"]
+    @lat = @firstresults["venue"]["lat"]
+    @lon = @firstresults["venue"]["lon"]
+    firstlocation = "<http://www.google.com/maps/place/#{@lat},#{@lon}|#{@name}>"
   else
-    location = "No location provided"
+    firstlocation = "No location provided"
+  end
+  get_firstname = @firstresults["name"]
+  get_firsturl = @firstresults["event_url"]
+  get_firstrsvpcount = @firstresults["yes_rsvp_count"]
+  get_firstwaitlistcount = @firstresults["waitlist_count"]
+  raw_firsttime = @firstresults["time"].to_f / 1000
+  utc_firstoffset = @firstresults["utc_offset"].to_i / 1000
+  calc_firsttime = raw_firsttime + utc_firstoffset
+  final_firsttime = Time.at(calc_firsttime)
+  cldr_firsttime = final_firsttime.localize
+  get_firsttime = "#{cldr_firsttime.to_short_s} #{cldr_firsttime.to_date.to_full_s}"
   end
 
-  get_name = @results["name"]
+  # Second Meetup
+  if @secondresults.nil?
+    get_secondname = ""
+    get_secondurl = ""
+    get_secondtime = ""
+    secondlocation = ""
+  else
+  # Check for venue information
+  if @secondresults["venue"]
+    @name = @secondresults["venue"]["name"]
+    @lat = @secondresults["venue"]["lat"]
+    @lon = @secondresults["venue"]["lon"]
+    secondlocation = "<http://www.google.com/maps/place/#{@lat},#{@lon}|#{@name}>"
+  else
+    secondlocation = "No location provided"
+  end
+  get_secondname = @secondresults["name"]
+  get_secondurl = @secondresults["event_url"]
+  raw_secondtime = @secondresults["time"].to_f / 1000
+  utc_secondoffset = @secondresults["utc_offset"].to_i / 1000
+  calc_secondtime = raw_secondtime + utc_secondoffset
+  final_secondtime = Time.at(calc_secondtime)
+  cldr_secondtime = final_secondtime.localize
+  get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
-  get_url = @results["event_url"]
-
-  raw_time = @results["time"].to_f / 1000
-  utc_offset = @results["utc_offset"].to_i / 1000
-  calc_time = Time.at(raw_time).getlocal(utc_offset)
-  cldr_time = calc_time.localize
-  get_time = "#{cldr_time.to_short_s} #{cldr_time.to_date.to_full_s}"
-
-  response = { title: "#{get_name}", title_link: "#{get_url}", text: "#{get_time}\n#{location}", color: "#{ENV["COLOR"]}"}
-
+  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
   end
 
 end
