@@ -9,7 +9,7 @@ Retrieves the next upcoming Meetup and posts it to Slack, or search for Meetups 
 * A [Heroku](http://www.heroku.com) account
 * Your [Meetup API key](http://www.meetup.com/meetup_api/)
 * An [outgoing webhook token](https://api.slack.com/outgoing-webhooks) for your Slack team
-* The Group IDs for the Meetup groups you would like to use. To find a group ID navigate to the [2/groups endpoint console](https://secure.meetup.com/meetup_api/console/?path=/2/groups), enter the group url name, and retrieve the ```id``` value from the response. 
+* The Group IDs for the Meetup groups you would like to use. To find a group ID navigate to the [2/groups endpoint console](https://secure.meetup.com/meetup_api/console/?path=/2/groups), enter the group url name, and retrieve the ```id``` value from the response. Ex: The NY Tech Meetup has a group url name of ```ny-tech``` and group id ```176399```.
 
 ### Setup
 * Clone this repo locally
