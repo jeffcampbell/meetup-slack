@@ -18,7 +18,7 @@ post "/" do
   response = ""
 begin
   puts "[LOG] #{params}"
-  params[:text] = params[:text].sub(params[:trigger_word], "").strip.gsub(\:, '')
+  params[:text] = params[:text].sub(params[:trigger_word], "").strip.gsub(:, '')
   unless params[:token] != ENV["OUTGOING_WEBHOOK_TOKEN"]
     response = { text: "Next Meetup:" }
     response[:attachments] = [ generate_attachment ]
