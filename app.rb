@@ -20,7 +20,7 @@ begin
   puts "[LOG] #{params}"
   params[:text] = params[:text].sub(params[:trigger_word], "").strip
   unless params[:text].index(':') != 2
-    params[:text].delete! ':'
+    params[:text] = params[:text].delete! ':'
   end
   unless params[:token] != ENV["OUTGOING_WEBHOOK_TOKEN"]
     response = { text: "Next Meetup:" }
