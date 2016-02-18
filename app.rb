@@ -95,7 +95,6 @@ end
   cldr_secondtime = final_secondtime.localize
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
-  def generate_asteroid
     asteroid_time = Time.at(calc_firsttime).strftime "%Y-%m-%d"
     puts "[LOG] #{asteroid_time}"
 
@@ -112,7 +111,7 @@ end
     asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].round(3)
 
     asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach}>"
-end
+
 
   response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}\n#{generate_asteroid}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
   end
