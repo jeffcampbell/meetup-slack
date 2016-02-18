@@ -97,7 +97,7 @@ end
 
 #  def generate_asteroid
     asteroid_time = Time.at(calc_firsttime).strftime "%Y-%m-%d"
-    puts "[LOG] #{asteroid_rawtime}"
+    puts "[LOG] #{asteroid_time}"
 
 #    reply = ""
 #    nasauri = "https://api.nasa.gov/neo/rest/v1/feed?start_date=#{asteroid_time}&api_key=#{ENV["NASA_API_KEY"]}"
