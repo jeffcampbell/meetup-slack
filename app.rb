@@ -106,13 +106,14 @@ end
     asteroiddata = asteroid["near_earth_objects"]["#{asteroid_time}"][0]
 
     asteroid_url = asteroiddata["nasa_jpl_url"]
-    asteroid_name = asteroiddata["name"]
-    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].to_i #.round(5)
+    asteroid_name = asteroiddata["name"].strip.gsub(/[()]/, "")
+    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"]
+    asteroid_speed = asteroiddata["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"].to_i.round(2)
 
-    asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach} Au"
+    asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach} Au @ #{asteroid_speed} km/h"
 
 
-  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}\n#{asteroid}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
+  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Asteroid Strike?", value: "#{asteroid}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
   end
 
 end
