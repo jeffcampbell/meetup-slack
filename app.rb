@@ -107,7 +107,7 @@ end
 
     asteroid_url = asteroiddata["nasa_jpl_url"]
     asteroid_name = asteroiddata["name"]
-    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].to_i.round(4)
+    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].to_i.round(5)
 
     asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach} Au"
 
