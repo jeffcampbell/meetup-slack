@@ -106,8 +106,8 @@ end
     asteroiddata = asteroid["near_earth_objects"]["#{asteroid_time}"][0]
 
     asteroid_url = asteroiddata["nasa_jpl_url"]
-    asteroid_name = asteroiddata["name"]
-    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].to_i #.round(5)
+    asteroid_name = asteroiddata["name"].strip.gsub(/()/, '')
+    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"]
 
     asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach} Au"
 
