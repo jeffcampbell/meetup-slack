@@ -95,27 +95,26 @@ end
   cldr_secondtime = final_secondtime.localize
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
-#  def generate_asteroid
+  def generate_asteroid
     asteroid_time = Time.at(calc_firsttime).strftime "%Y-%m-%d"
     puts "[LOG] #{asteroid_time}"
 
-#    reply = ""
-#    nasauri = "https://api.nasa.gov/neo/rest/v1/feed?start_date=#{asteroid_time}&api_key=#{ENV["NASA_API_KEY"]}"
-#    request = HTTParty.get(nasauri)
-#    puts "[LOG] #{request.body}"
-#    asteroid = JSON.parse(request.body)
+    asteroid = ""
+    nasauri = "https://api.nasa.gov/neo/rest/v1/feed?start_date=#{asteroid_time}&api_key=#{ENV["NASA_API_KEY"]}"
+    request = HTTParty.get(nasauri)
+    puts "[LOG] #{request.body}"
+    asteroid = JSON.parse(request.body)
 
-#    asteroiddata = asteroid["near_earth_objects"]["#{asteroid_rawtime}"][0]
+    asteroiddata = asteroid["near_earth_objects"]["#{asteroid_rawtime}"][0]
 
-#    asteroid_url = asteroiddata["nasa_jpl_url"]
-#    asteroid_name = asteroiddata["name"]
-#    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].round(3)
+    asteroid_url = asteroiddata["nasa_jpl_url"]
+    asteroid_name = asteroiddata["name"]
+    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].round(3)
 
-#    asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach}>"
-#    \n#{generate_asteroid}
-#end
+    asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach}>"
+end
 
-  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
+  response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}\n#{generate_asteroid}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
   end
 
 end
