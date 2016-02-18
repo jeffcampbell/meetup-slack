@@ -107,9 +107,9 @@ end
 
     asteroid_url = asteroiddata["nasa_jpl_url"]
     asteroid_name = asteroiddata["name"]
-    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"] #.to_i.round(3)
+    asteroid_approach = asteroiddata["close_approach_data"][0]["miss_distance"]["astronomical"].to_i.round(4)
 
-    asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach}>"
+    asteroid = "<#{asteroid_url}|#{asteroid_name}> - #{asteroid_approach} Au"
 
 
   response = { title: "#{get_firstname}", title_link: "#{get_firsturl}", text: "#{get_firsttime}\n#{firstlocation}\n#{asteroid}", fields: [ { title: "RSVPs", value: "#{get_firstrsvpcount}", short: true }, { title: "Waitlist", value: "#{get_firstwaitlistcount}", short: true }, { title: "Following Meetup:", value: "<#{get_secondurl}|#{get_secondname}> - #{get_secondtime}", short: false } ] }
