@@ -96,7 +96,7 @@ end
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
 #  def generate_asteroid
-    asteroid_rawtime = final_firsttime.localize.to_additional_s("YME")
+    asteroid_rawtime = final_firsttime.to_additional_s("YME")
     puts "[LOG] #{asteroid_rawtime}"
 
 #    reply = ""
