@@ -96,11 +96,11 @@ end
   get_secondtime = "#{cldr_secondtime.to_short_s} #{cldr_secondtime.to_date.to_full_s}"
 
 #  def generate_asteroid
-    asteroid_rawtime = final_firsttime.to_additional_s("YME")
+    asteroid_time = Time.at(calc_firsttime).strftime "%Y-%m-%d"
     puts "[LOG] #{asteroid_rawtime}"
 
 #    reply = ""
-#    nasauri = "https://api.nasa.gov/neo/rest/v1/feed?start_date=#{asteroid_rawtime}&api_key=#{ENV["NASA_API_KEY"]}"
+#    nasauri = "https://api.nasa.gov/neo/rest/v1/feed?start_date=#{asteroid_time}&api_key=#{ENV["NASA_API_KEY"]}"
 #    request = HTTParty.get(nasauri)
 #    puts "[LOG] #{request.body}"
 #    asteroid = JSON.parse(request.body)
