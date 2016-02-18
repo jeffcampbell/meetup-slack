@@ -101,10 +101,9 @@ end
     asteroid = ""
     nasauri = "https://api.nasa.gov/neo/rest/v1/feed?start_date=#{asteroid_time}&api_key=#{ENV["NASA_API_KEY"]}"
     request = HTTParty.get(nasauri)
-    puts "[LOG] #{request.body}"
     asteroid = JSON.parse(request.body)
 
-    asteroiddata = asteroid["near_earth_objects"]["#{asteroid_rawtime}"][0]
+    asteroiddata = asteroid["near_earth_objects"]["#{asteroid_time}"][0]
 
     asteroid_url = asteroiddata["nasa_jpl_url"]
     asteroid_name = asteroiddata["name"]
